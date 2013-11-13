@@ -3,8 +3,8 @@ package;
 import nme.ui.MultitouchInputMode;
 import nme.display.Sprite;
 import nme.display.DisplayObjectContainer;
-import com.eclecticdesignstudio.motion.actuators.GenericActuator;
-import com.eclecticdesignstudio.motion.Actuate;
+import motion.actuators.GenericActuator;
+import motion.Actuate;
 
 import haxe.Timer;
 import nme.Lib;
