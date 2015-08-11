@@ -178,12 +178,12 @@ class RoxGestureAgent {
         return Multitouch.supportsTouchEvents && Multitouch.maxTouchPoints > 1;
     }
 
-    private inline function convertTouch(e: Dynamic) {
+    private inline function convertTouch(e: TouchEvent) {
         owner.dispatchEvent(new RoxGestureEvent(typeMap.get(e.type), e.bubbles, e.cancelable,
                 e.localX, e.localY, e.stageX, e.stageY, e.touchPointID, this));
     }
 
-    private inline function convertMouse(e: Dynamic) {
+    private inline function convertMouse(e: MouseEvent) {
         var t: String = e.type;
         if (t == MouseEvent.MOUSE_DOWN || t == MouseEvent.MOUSE_UP || t == MouseEvent.CLICK || e.buttonDown) {
             owner.dispatchEvent(new RoxGestureEvent(typeMap.get(t), e.bubbles, e.cancelable,
@@ -191,7 +191,7 @@ class RoxGestureAgent {
         }
     }
 
-    private inline function onTouch(e: Dynamic) {
+    private inline function onTouch(e: TouchEvent) {
         var id: Int = e.touchPointID;
 //        trace("onTouch:e=" + e +",touchId="+id);
         var prim = touch0 == null || touch0.tid == id;
@@ -204,7 +204,7 @@ class RoxGestureAgent {
 //        }
     }
 
-    private inline function onMouse(e: Dynamic) {
+    private inline function onMouse(e: MouseEvent) {
 //        trace("onMouse:e=" + e);
         var t: String = e.type;
         if (t == MouseEvent.MOUSE_DOWN || t == MouseEvent.MOUSE_UP || e.buttonDown) {
@@ -213,7 +213,7 @@ class RoxGestureAgent {
         }
     }
 
-    private function handleTouch(type: String, e: Dynamic, prim: Bool, touchId: Int) : Bool {
+    private function handleTouch(type: String, e: MouseEvent, prim: Bool, touchId: Int) : Bool {
 //        trace("type=" + type + ",e=" + e);
         var pt = new TouchPoint(owner, e, touchId);
         var tp = prim ? touch0 : touch1;
@@ -377,7 +377,7 @@ private class TouchPoint {
     public var lpt: Point;
     public var spt: Point;
     public var time: Float;
-    public function new(src: InteractiveObject, e: Dynamic, touchId: Int) {
+    public function new(src: InteractiveObject, e: MouseEvent, touchId: Int) {
         tid = touchId;
         sx = e.stageX;
         sy = e.stageY;
