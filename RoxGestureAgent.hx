@@ -20,6 +20,14 @@ import openfl.ui.Multitouch;
 private typedef Hash<T> = Map<String, T>;
 #end
 
+#if (cpp || neko)
+typedef TouchEventType = TouchEvent;
+typedef MouseEventType = MouseEvent;
+#else
+typedef TouchEventType = Dynamic;
+typedef MouseEventType = Dynamic;
+#end
+
 class RoxGestureAgent {
 
     public static inline var TOUCH_POINT = 1;
@@ -80,7 +88,10 @@ class RoxGestureAgent {
         init();
         owner = inOwner;
         mode = inMode;
-        var isTouch = Multitouch.supportsTouchEvents;
+        var isTouch =
+            #if desktop false;
+            #else Multitouch.supportsTouchEvents;
+            #end
         owner.mouseEnabled = true;
         listenEvents = mode == TOUCH_POINT ? (isTouch ? touchEvents : mouseEvents) : (isTouch ? geTouchEvents : geMouseEvents);
         handler = mode == TOUCH_POINT ? (isTouch ? convertTouch : convertMouse) : (isTouch ? onTouch : onMouse);
@@ -178,12 +189,12 @@ class RoxGestureAgent {
         return Multitouch.supportsTouchEvents && Multitouch.maxTouchPoints > 1;
     }
 
-    private inline function convertTouch(e: TouchEvent) {
+    private inline function convertTouch(e: TouchEventType) {
         owner.dispatchEvent(new RoxGestureEvent(typeMap.get(e.type), e.bubbles, e.cancelable,
                 e.localX, e.localY, e.stageX, e.stageY, e.touchPointID, this));
     }
 
-    private inline function convertMouse(e: MouseEvent) {
+    private inline function convertMouse(e: MouseEventType) {
         var t: String = e.type;
         if (t == MouseEvent.MOUSE_DOWN || t == MouseEvent.MOUSE_UP || t == MouseEvent.CLICK || e.buttonDown) {
             owner.dispatchEvent(new RoxGestureEvent(typeMap.get(t), e.bubbles, e.cancelable,
@@ -191,7 +202,7 @@ class RoxGestureAgent {
         }
     }
 
-    private inline function onTouch(e: TouchEvent) {
+    private inline function onTouch(e: TouchEventType) {
         var id: Int = e.touchPointID;
 //        trace("onTouch:e=" + e +",touchId="+id);
         var prim = touch0 == null || touch0.tid == id;
@@ -204,7 +215,7 @@ class RoxGestureAgent {
 //        }
     }
 
-    private inline function onMouse(e: MouseEvent) {
+    private inline function onMouse(e: MouseEventType) {
 //        trace("onMouse:e=" + e);
         var t: String = e.type;
         if (t == MouseEvent.MOUSE_DOWN || t == MouseEvent.MOUSE_UP || e.buttonDown) {
@@ -213,7 +224,7 @@ class RoxGestureAgent {
         }
     }
 
-    private function handleTouch(type: String, e: MouseEvent, prim: Bool, touchId: Int) : Bool {
+    private function handleTouch(type: String, e: MouseEventType, prim: Bool, touchId: Int) : Bool {
 //        trace("type=" + type + ",e=" + e);
         var pt = new TouchPoint(owner, e, touchId);
         var tp = prim ? touch0 : touch1;
@@ -377,7 +388,7 @@ private class TouchPoint {
     public var lpt: Point;
     public var spt: Point;
     public var time: Float;
-    public function new(src: InteractiveObject, e: MouseEvent, touchId: Int) {
+    public function new(src: InteractiveObject, e: MouseEventType, touchId: Int) {
         tid = touchId;
         sx = e.stageX;
         sy = e.stageY;
