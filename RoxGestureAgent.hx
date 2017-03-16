@@ -208,12 +208,39 @@ class RoxGestureAgent {
         var prim = touch0 == null || touch0.tid == id;
         if (prim || (touch1 != null && touch1.tid == id) || (touch0 != null && touch1 == null && touch0.tid != id)) {
 //            if (handleTouch(typeMap.get(e.type), e, prim, id)) e.rox_stopPropagation();
+			#if(cpp || neko)
+			handleTouch(typeMap.get(e.type), touchToMouse(e), prim, id);
+			#else
             handleTouch(typeMap.get(e.type), e, prim, id);
+			#end
         }
 //        if (id <= 1) {
 //            if (handleTouch(typeMap.get(e.type), e, id == 0)) e.rox_stopPropagation();
 //        }
     }
+	
+	#if (cpp || neko)
+	private inline function touchToMouse(e:TouchEventType):MouseEventType
+	{
+		var eType = switch(e.type)
+		{
+			case TouchEvent.TOUCH_BEGIN: MouseEvent.MOUSE_DOWN;
+			case TouchEvent.TOUCH_END: MouseEvent.MOUSE_UP;
+			case TouchEvent.TOUCH_MOVE: MouseEvent.MOUSE_MOVE;
+			case TouchEvent.TOUCH_OUT: MouseEvent.MOUSE_OUT;
+			case TouchEvent.TOUCH_OVER: MouseEvent.MOUSE_OVER;
+			case TouchEvent.TOUCH_ROLL_OUT: MouseEvent.ROLL_OUT;
+			case TouchEvent.TOUCH_ROLL_OVER: MouseEvent.ROLL_OVER;
+			case TouchEvent.TOUCH_TAP: MouseEvent.CLICK;
+			case _: MouseEvent.MOUSE_MOVE;
+		}
+
+		return new MouseEventType(
+			eType, e.bubbles, e.cancelable, e.localX, e.localY,
+			e.relatedObject, e.ctrlKey, e.altKey, e.shiftKey,
+			false, 0, e.commandKey, 0);
+	}
+	#end
 
     private inline function onMouse(e: MouseEventType) {
 //        trace("onMouse:e=" + e);
