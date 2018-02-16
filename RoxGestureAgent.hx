@@ -235,10 +235,15 @@ class RoxGestureAgent {
 			case _: MouseEvent.MOUSE_MOVE;
 		}
 
-		return new MouseEventType(
+        var me = new MouseEventType(
 			eType, e.bubbles, e.cancelable, e.localX, e.localY,
 			e.relatedObject, e.ctrlKey, e.altKey, e.shiftKey,
 			false, 0, e.commandKey, 0);
+
+        me.stageX = e.stageX;
+        me.stageY = e.stageY;
+
+        return me;
 	}
 	#end
 
