@@ -3,8 +3,6 @@ package;
 import openfl.ui.MultitouchInputMode;
 import openfl.display.Sprite;
 import openfl.display.DisplayObjectContainer;
-import motion.actuators.GenericActuator;
-import motion.Actuate;
 
 import haxe.Timer;
 import openfl.Lib;
@@ -15,6 +13,8 @@ import openfl.events.TouchEvent;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.ui.Multitouch;
+
+import com.stencyl.utils.motion.*;
 
 #if haxe3
 private typedef Hash<T> = Map<String, T>;
@@ -73,8 +73,8 @@ class RoxGestureAgent {
     private var touchList: List<TouchPoint>;
     private var listenEvents: Array<String>;
     private var handler: Dynamic -> Void;
-    private var longPressTimer: GenericActuator<Dynamic>;
-    private var tweener: GenericActuator<Dynamic>;
+    private var longPressTimer: TweenTimer;
+    private var tweener: TweenFloat2;
     private var overlay: Sprite; // used in capture mode, to capture events outside the owner
     /**
      * READY -> begin:BEGIN -> end:tap
@@ -123,13 +123,17 @@ class RoxGestureAgent {
         return #if haxe3 handleEvent.bind(flags) #else callback(handleEvent, flags) #end;
     }
 
-    public inline function startTween(target: Dynamic, interval: Float, properties: Dynamic) {
-        tweener = cast(Actuate.tween(target, interval, properties, false));
+    public inline function startTweenXY(target: InteractiveObject, interval: Float, x: Float, y: Float) {
+        tweener = new TweenFloat2();
+        tweener.tween(target.x, x, target.y, y, Easing.linear, Std.int(interval*1000)).doOnUpdate(function() {
+            target.x = tweener.value1;
+            target.y = tweener.value2;
+        });
     }
 
     public inline function stopTween() {
         if (tweener != null) {
-            Actuate.stop(tweener, null, false, false);
+            TweenManager.cancel(tweener);
             tweener = null;
         }
     }
@@ -153,7 +157,7 @@ class RoxGestureAgent {
                 if (flags & PAN_Y != 0) sp.y += pt.y;
             case RoxGestureEvent.GESTURE_SWIPE:
                 var pt = localOffset(sp, new Point(e.extra.x * SWIPE_SCROLL_TIME, e.extra.y * SWIPE_SCROLL_TIME));
-                startTween(sp, SWIPE_SCROLL_TIME, { x: sp.x + pt.x, y: sp.y + pt.y });
+                startTweenXY(sp, SWIPE_SCROLL_TIME, sp.x + pt.x, sp.y + pt.y);
             case RoxGestureEvent.GESTURE_PINCH:
                 var scale: Float = e.extra;
                 var spt = sp.parent.localToGlobal(new Point(sp.x, sp.y));
@@ -267,7 +271,7 @@ class RoxGestureAgent {
             if (prim && type == RoxGestureEvent.TOUCH_BEGIN) {
                 state = BEGIN;
                 touch0 = pt;
-                longPressTimer = cast(Actuate.timer(longPressDelay).onComplete(sendLongPress, [ pt ]));
+                longPressTimer = cast TweenManager.timer(Std.int(longPressDelay*1000)).doOnComplete(sendLongPress.bind(pt));
                 stopTween();
                 if (mode == GESTURE_CAPTURE) {
                     var stage = Lib.current.stage;
@@ -376,7 +380,7 @@ class RoxGestureAgent {
 
     private inline function cancelLongPress() {
         if (longPressTimer != null) {
-            Actuate.stop(longPressTimer, null, false, false);
+            TweenManager.cancel(longPressTimer);
             longPressTimer = null;
         }
     }
