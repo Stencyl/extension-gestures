@@ -20,7 +20,7 @@ import com.stencyl.utils.motion.*;
 private typedef Hash<T> = Map<String, T>;
 #end
 
-#if (cpp || neko)
+#if cpp
 typedef TouchEventType = TouchEvent;
 typedef MouseEventType = MouseEvent;
 #else
@@ -212,7 +212,7 @@ class RoxGestureAgent {
         var prim = touch0 == null || touch0.tid == id;
         if (prim || (touch1 != null && touch1.tid == id) || (touch0 != null && touch1 == null && touch0.tid != id)) {
 //            if (handleTouch(typeMap.get(e.type), e, prim, id)) e.rox_stopPropagation();
-			#if(cpp || neko)
+			#if cpp
 			handleTouch(typeMap.get(e.type), touchToMouse(e), prim, id);
 			#else
             handleTouch(typeMap.get(e.type), e, prim, id);
@@ -223,7 +223,7 @@ class RoxGestureAgent {
 //        }
     }
 	
-	#if (cpp || neko)
+	#if cpp
 	private inline function touchToMouse(e:TouchEventType):MouseEventType
 	{
 		var eType = switch(e.type)
