@@ -1,4 +1,4 @@
-package;
+package com.stencyl.gestures;
 
 import openfl.ui.MultitouchInputMode;
 import openfl.display.Sprite;

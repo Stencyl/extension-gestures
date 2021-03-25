@@ -1,4 +1,4 @@
-package;
+package com.stencyl.gestures;
 
 import openfl.events.Event;
 import openfl.events.MouseEvent;
