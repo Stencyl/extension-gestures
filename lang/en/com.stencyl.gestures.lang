@@ -1,0 +1,20 @@
+up=up
+down=down
+left=left
+right=right
+
+swipe-detect=swiped %0 [c:mobile]
+swipe-detect.help=Swiped the screen up/down/left/right.
+
+events.defs.swipe=Swipe
+
+event-device-swipe=when the device is swiped %0 [c:mobile]
+event-device-swipe.help=Device is swiped.
+
+cat.controls.mobile.gestures=Gestures
+
+# deprecated
+enable=enable
+disable=disable
+swipe-show-hide=%0 gestures [c:mobile]
+swipe-show-hide.help=Enable gesture detection like swiping. Must explicitly enable to turn it on. May conflict with multi-touch when on.

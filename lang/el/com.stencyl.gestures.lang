@@ -1,0 +1,6 @@
+up=πάνω
+down=κάτω
+left=αριστερά
+right=δεξιά
+swipe-detect=αγγίχτηκε %0 [c:mobile]
+swipe-detect.help=Άγγιγμα οθόνης πάνω/κάτω/αριστερά/δεξιά.

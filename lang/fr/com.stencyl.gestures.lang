@@ -1,0 +1,6 @@
+up=haut
+down=est appuyé
+left=gauche
+right=droite
+swipe-detect=glissé %0 [c:mobile]
+swipe-detect.help=Penché l'écran vers le Haut, Bas, Gauche, Droite.

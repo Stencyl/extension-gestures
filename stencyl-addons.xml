@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stencyl-addons>
+
+	<events-addon target="stencyl-behavior-events">
+		<merge-section id="input.mobile">
+			<event block="event-device-swipe" menuText="@events.defs.swipe" description="@events.defs.swipe" icon="swipe" menuIcon="swipe" />
+		</merge-section>
+	</events-addon>
+
+	<palette-addon target="stencyl-behavior-palette">
+		<merge-section id="user-input.mobile">
+			<header title="@cat.controls.mobile.gestures" />
+			<block tag="swipe-detect" />
+		</merge-section>
+	</palette-addon>
+
+</stencyl-addons>

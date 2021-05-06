@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blocks>
+
+    <dropdown id="upDownLeftRight">
+        <choices>
+            <c text="@up" code="Up" />
+            <c text="@down" code="Down" />
+            <c text="@left" code="Left" />
+            <c text="@right" code="Right" />
+        </choices>
+    </dropdown>
+
+    <dropdown id="enableDisable">
+        <choices>
+            <c text="@enable" code="enable" />
+            <c text="@disable" code="disable" />
+        </choices>
+    </dropdown>
+
+    <block tag="event-device-swipe"
+           type="event"
+           returns="void"
+           category="events"
+           helpURL="event-input">
+        <code>
+            <event-def params="" condition="Input.swiped#0" innercode="#1" listener="addListener(engine.whenSwiped, ${eventRef});" />
+        </code>
+        <fields>
+            <dropdown order="0" id="upDownLeftRight" />
+            <code-block order="1" />
+        </fields>
+        <context>
+            <innerContext type="class" value="com.stencyl.behavior.Script" />
+        </context>
+    </block>
+
+    <block tag="swipe-detect"
+           code="Input.swiped~"
+           type="normal"
+           returns="boolean"
+           category="mobile"
+           helpURL="input-mobile">
+        <fields>
+            <dropdown order="0" id="upDownLeftRight" />
+        </fields>
+    </block>
+
+    <!-- deprecated blocks -->
+
+    <block tag="swipe-show-hide"
+           code="/*Input.~SwipeDetection();*/"
+           type="action"
+           returns="void"
+           category="mobile"
+           helpURL="input-mobile"
+           hidden="true"
+           deprecated="true">
+        <fields>
+            <dropdown order="0" id="enableDisable" />
+        </fields>
+    </block>    
+
+</blocks>

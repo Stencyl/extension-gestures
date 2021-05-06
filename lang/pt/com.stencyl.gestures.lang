@@ -1,0 +1,6 @@
+up=cima
+down=baixo
+left=esquerda
+right=direita
+swipe-detect=deslizou %0 [c:mobile]
+swipe-detect.help=Deslizou o ecrã para cima/baixo/esquerda/direita.

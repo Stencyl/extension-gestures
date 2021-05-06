@@ -1,0 +1,6 @@
+up=su
+down=giù
+left=sinistra
+right=destra
+swipe-detect=scambio %0 [c:mobile]
+swipe-detect.help=Strisciato lo schermo su/giù/sinistra/destra

@@ -1,0 +1,6 @@
+up=up
+down=down
+left=left
+right=right
+swipe-detect=swiped %0 [c:mobile]
+swipe-detect.help=Swiped the screen up/down/left/right.
