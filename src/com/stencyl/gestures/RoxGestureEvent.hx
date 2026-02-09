@@ -5,6 +5,12 @@ import openfl.events.MouseEvent;
 import openfl.events.TouchEvent;
 import openfl.geom.Point;
 
+#if (haxe_ver >= 4.1)
+import Std.isOfType as isOfType;
+#else
+import Std.is as isOfType;
+#end
+
 class RoxGestureEvent extends Event {
 
     public static inline var TOUCH_BEGIN = "rox_touch_begin";
@@ -50,7 +56,7 @@ class RoxGestureEvent extends Event {
     override public function toString() : String {
         return type + "(" + touchPointID + "): local=(" + localX + "," + localY
                 + "), stage=(" + stageX + "," + stageY + "), extra="
-                + (Std.is(extra, Point) ? "Point(" + extra.x + "," + extra.y + ")" : extra);
+                + (isOfType(extra, Point) ? "Point(" + extra.x + "," + extra.y + ")" : extra);
     }
 
 }
